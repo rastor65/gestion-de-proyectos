@@ -4,15 +4,11 @@ const sheets = google.sheets("v4")
 
 const getAuthClient = () => {
   const auth = new google.auth.GoogleAuth({
+    // ✅ SOLO los campos permitidos por JWTInput
     credentials: {
-      type: "service_account",
-      project_id: "investigacion-479315",
-      private_key_id: "key-id",
-      private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       client_email: process.env.GOOGLE_SHEETS_CLIENT_EMAIL,
-      client_id: "client-id",
-      auth_uri: "https://accounts.google.com/o/oauth2/auth",
-      token_uri: "https://oauth2.googleapis.com/token",
+      private_key: process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+      project_id: process.env.GOOGLE_SHEETS_PROJECT_ID,
     },
     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
   })
@@ -22,7 +18,9 @@ const getAuthClient = () => {
 
 const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID
 
-// ESTUDIANTES operations
+// ==========================================
+// ESTUDIANTES
+// ==========================================
 export async function getEstudiantes() {
   try {
     const auth = getAuthClient()
@@ -70,7 +68,7 @@ export async function updateEstudiante(codigo: string, nombreCompleto: string, c
     const auth = getAuthClient()
     const estudiantes = await getEstudiantes()
 
-    const rowIndex = estudiantes.findIndex((e) => e.codigo === codigo) + 2 // +2 for header
+    const rowIndex = estudiantes.findIndex((e) => e.codigo === codigo) + 2 // +2 por encabezado
 
     await sheets.spreadsheets.values.update({
       auth,
@@ -108,7 +106,9 @@ export async function deleteEstudiante(codigo: string) {
   }
 }
 
-// DOCENTES operations
+// ==========================================
+// DOCENTES
+// ==========================================
 export async function getDocentes() {
   try {
     const auth = getAuthClient()
@@ -213,7 +213,9 @@ export async function deleteDocente(nombreCompleto: string) {
   }
 }
 
-// PROYECTOS operations
+// ==========================================
+// PROYECTOS
+// ==========================================
 export async function getProyectos() {
   try {
     const auth = getAuthClient()
