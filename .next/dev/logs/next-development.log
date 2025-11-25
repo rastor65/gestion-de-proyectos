@@ -1,27 +1,82 @@
-[00:00:01.620] Server  LOG     
-[00:00:01.621] Server  LOG        We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
-[00:00:01.621] Server  LOG        The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+[00:00:16.994] Server  LOG      ✓ Ready in 3.1s
+[00:00:20.285] Server  LOG      ○ Compiling / ...
+[00:01:03.102] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:15.540] Server  LOG      ○ Compiling /api/estudiantes ...
+[00:01:18.106] Browser ERROR   A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
 
-[00:00:01.622] Server  LOG        	- include was updated to add '.next/dev/types/**/*.ts'
-[00:00:01.623] Server  LOG     
-[00:00:01.623] Server  LOG        The following mandatory changes were made to your tsconfig.json:
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
 
-[00:00:01.623] Server  LOG        	- jsx was set to react-jsx (next.js uses the React automatic runtime)
-[00:00:01.623] Server  LOG     
-[00:00:01.999] Server  LOG      ✓ Ready in 1474ms
-[00:00:12.459] Server  LOG      ○ Compiling / ...
-[00:00:22.258] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:25.625] Server  LOG      ○ Compiling /api/estudiantes ...
-[00:00:42.533] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:42.533] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:42.533] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764089807257}
-[00:03:04.497] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. FABILEIDI DAYANA FREILE PALACIO
-[00:03:04.497] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. MIGUEL HUMBERTO ROMERO ACUÑA
-[00:03:04.497] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. FABILEIDI DAYANA FREILE PALACIO
-[00:03:05.013] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. FABILEIDI DAYANA FREILE PALACIO
-[00:03:05.013] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. MIGUEL HUMBERTO ROMERO ACUÑA
-[00:03:05.013] Browser ERROR   Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. FABILEIDI DAYANA FREILE PALACIO
-[00:03:18.598] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:18.997] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:03:18.997] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:03:18.997] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://localhost:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764089978614}
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="/Documents...">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="es">
+                          <body
+                            className="font-sans antialiased"
+-                           data-intersub-modeplugin="2001"
+                          >
+                  ...
+
+[00:01:39.431] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.630] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\16dd3_next_769bb395._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.643] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.683] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require-hook.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.690] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.702] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\load-components.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.771] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.845] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.876] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.933] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:39.939] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.000] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.038] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.067] Server  ERROR    ⨯ Error: export const dynamic = "force-static"/export const revalidate not configured on route "/api/docentes" with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+[00:01:40.403] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.468] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\16dd3_next_3d9af26a._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.469] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.485] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require-hook.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.511] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.522] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\load-components.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.530] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.533] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.535] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.563] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.569] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.576] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.588] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:40.608] Server  ERROR    ⨯ Error: export const dynamic = "force-static"/export const revalidate not configured on route "/api/estudiantes" with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+[00:01:41.112] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.374] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\16dd3_next_46ffcd15._.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.469] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\.next\dev\server\chunks\[turbopack]_runtime.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.541] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require-hook.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.568] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\require.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.580] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\load-components.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.587] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\next-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.599] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\trace\tracer.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.603] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\dev\next-dev-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.619] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\base-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.632] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\trace\trace.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.745] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\router-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:41.919] Server  ERROR   C:\Users\esthe\Documents\GitHub\gestion-de-proyectos\node_modules\.pnpm\next@16.0.3_react-dom@19.2.0_react@19.2.0__react@19.2.0\node_modules\next\dist\server\lib\start-server.js: Invalid source map. Only conformant source maps can be used to find the original code. Cause: Error: sourceMapURL could not be parsed
+[00:01:42.088] Server  ERROR    ⨯ Error: export const dynamic = "force-static"/export const revalidate not configured on route "/api/proyectos" with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export

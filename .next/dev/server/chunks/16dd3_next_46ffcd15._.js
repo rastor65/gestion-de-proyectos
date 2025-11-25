@@ -14157,7 +14157,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$GitHub$2f$gesti
 ;
 // We inject the nextConfigOutput here so that we can use them in the route
 // module.
-const nextConfigOutput = "";
+const nextConfigOutput = "export";
 const routeModule = new __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$GitHub$2f$gestion$2d$de$2d$proyectos$2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$route$2d$modules$2f$app$2d$route$2f$module$2e$compiled$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["AppRouteRouteModule"]({
     definition: {
         kind: __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$GitHub$2f$gestion$2d$de$2d$proyectos$2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_react$2d$dom$40$19$2e$2$2e$0_react$40$19$2e$2$2e$0_$5f$react$40$19$2e$2$2e$0$2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$route$2d$kind$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["RouteKind"].APP_ROUTE,
