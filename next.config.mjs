@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ❌ NADA de output: "export"
-  // ✅ Si quieres, puedes usar "standalone" para desplegar en un servidor Node
-  // output: "standalone",
+  // 👇 Si en algún momento pusiste esto, quítalo
+  // output: "export",
 }
 
-module.exports = nextConfig
+export default nextConfig
