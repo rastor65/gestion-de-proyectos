@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getDocentes, addDocente, updateDocente, deleteDocente } from "@/lib/google-sheets"
 
+// 🔹 Muy importante para evitar problemas con generación estática
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   try {
     const docentes = await getDocentes()
@@ -25,6 +28,7 @@ export async function POST(request: NextRequest) {
       telefono,
       tipoVinculacion,
     )
+
     return NextResponse.json(newDocente, { status: 201 })
   } catch (error) {
     console.error("Error creating teacher:", error)
@@ -46,6 +50,7 @@ export async function PUT(request: NextRequest) {
       telefono,
       tipoVinculacion,
     )
+
     return NextResponse.json(updatedDocente)
   } catch (error) {
     console.error("Error updating teacher:", error)

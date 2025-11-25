@@ -1,8 +1,8 @@
-// TODO: Integrate with Google Sheets API
-// Scaffold for proyectos endpoints
-
 import { type NextRequest, NextResponse } from "next/server"
 import { getProyectos, addProyecto, updateProyecto, deleteProyecto } from "@/lib/google-sheets"
+
+// 🔹 Igualmente dinámica esta ruta
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {

@@ -1,8 +1,8 @@
-// This is a scaffold route that interacts with Google Sheets API
-// Replace the mock implementation with actual Google Sheets API calls
-
 import { type NextRequest, NextResponse } from "next/server"
 import { getEstudiantes, addEstudiante, updateEstudiante, deleteEstudiante } from "@/lib/google-sheets"
+
+// 🔹 Forzamos la ruta a ser dinámica
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   try {
