@@ -5,13 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Pencil, Trash2, Plus } from "lucide-react"
-import EstudianteModal from "@/components/modals/estudiante-modal"
+import EstudianteModal, { Estudiante } from "@/components/modals/estudiante-modal"
 
-interface Estudiante {
-  codigo: string
-  nombreCompleto: string
-  correo?: string
-}
 
 export default function Estudiantes() {
   const [estudiantes, setEstudiantes] = useState<Estudiante[]>([])
@@ -169,12 +164,14 @@ export default function Estudiantes() {
       </Card>
 
       <EstudianteModal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-          setEditingEstudiante(null)
+        open={showModal}
+        onOpenChange={(open) => {
+          setShowModal(open)
+          if (!open) {
+            setEditingEstudiante(null)
+          }
         }}
-        onSave={handleSave}
+        onSave={handleSave}   // tu función que hace POST/PUT a /api/estudiantes
         initialData={editingEstudiante}
       />
     </div>
