@@ -2,65 +2,95 @@
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Users, BookOpen, FolderOpen, TrendingUp, BarChart3 } from "lucide-react"
-import type { DashboardStats } from "@/lib/types"
-import type { Proyecto, Estudiante, Docente } from "@/lib/types"
+import { Skeleton } from "@/components/ui/skeleton"
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts"
+import type { Proyecto } from "@/components/modals/proyecto-modal"
+
+// Tipos mínimos para estudiantes y docentes según tus APIs
+interface Estudiante {
+  id?: string
+  codigo: string
+  nombreCompleto: string
+  correo: string
+}
+
+interface Docente {
+  id?: string
+  nombreCompleto: string
+  asignatura: string
+  correo: string
+}
+
+// Ahora sí, incluimos las nuevas propiedades
+interface DashboardStats {
+  totalEstudiantes: number
+  totalDocentes: number
+  totalProyectos: number
+  promedio: number
+  projectsByStatus: { name: string; value: number }[]
+  projectsBySubject: { name: string; value: number }[]
+  projectsByPeriod: { name: string; value: number }[]
+}
+
+const COLORS = ["#0e7490", "#22c55e", "#f59e0b", "#8b5cf6", "#0f172a", "#ef4444", "#14b8a6"]
 
 export default function DashboardView() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [estudiantesRes, docentesRes, proyectosRes] = await Promise.all([
+
+        const [estRes, docRes, projRes] = await Promise.all([
           fetch("/api/estudiantes"),
           fetch("/api/docentes"),
           fetch("/api/proyectos"),
         ])
 
-        if (!estudiantesRes.ok || !docentesRes.ok || !proyectosRes.ok) {
-          throw new Error("Failed to fetch data")
-        }
+        const [estudiantes, docentes, proyectos]: [Estudiante[], Docente[], Proyecto[]] = await Promise.all([
+          estRes.json(),
+          docRes.json(),
+          projRes.json(),
+        ])
 
-        const estudiantes: Estudiante[] = await estudiantesRes.json()
-        const docentes: Docente[] = await docentesRes.json()
-        const proyectos: Proyecto[] = await proyectosRes.json()
-
-        // Calculate statistics
-        const projectsByStatus: Record<string, number> = {
-          Formulación: 0,
-          "En desarrollo": 0,
-          Aprobado: 0,
-          Finalizado: 0,
-          Archivado: 0,
-          "Sin estado": 0,
-        }
-
-        const projectsBySubject: Record<string, number> = {}
-        const projectsByPeriod: Record<string, number> = {}
-
-        proyectos.forEach((p) => {
-          // Count by status
-          if (p.estado) {
-            projectsByStatus[p.estado] = (projectsByStatus[p.estado] || 0) + 1
-          } else {
-            projectsByStatus["Sin estado"] = (projectsByStatus["Sin estado"] || 0) + 1
-          }
-
-          // Count by subject
-          projectsBySubject[p.asignatura] = (projectsBySubject[p.asignatura] || 0) + 1
-
-          // Count by period
-          projectsByPeriod[p.periodo] = (projectsByPeriod[p.periodo] || 0) + 1
-        })
-
-        const totalProyectos = proyectos.length
         const totalEstudiantes = estudiantes.length
         const totalDocentes = docentes.length
+        const totalProyectos = proyectos.length
+
+        // Agrupación por estado
+        const statusMap: Record<string, number> = {}
+        // Agrupación por asignatura
+        const subjectMap: Record<string, number> = {}
+        // Agrupación por periodo
+        const periodMap: Record<string, number> = {}
+
+        proyectos.forEach((p) => {
+          const estado = (p.estado || "Sin estado").toString()
+          const asignatura = (p.asignatura || "Sin asignatura").toString()
+          const periodo = (p.periodo || "Sin período").toString()
+
+          statusMap[estado] = (statusMap[estado] || 0) + 1
+          subjectMap[asignatura] = (subjectMap[asignatura] || 0) + 1
+          periodMap[periodo] = (periodMap[periodo] || 0) + 1
+        })
+
+        const projectsByStatus = Object.entries(statusMap).map(([name, value]) => ({ name, value }))
+        const projectsBySubject = Object.entries(subjectMap).map(([name, value]) => ({ name, value }))
+        const projectsByPeriod = Object.entries(periodMap).map(([name, value]) => ({ name, value }))
 
         setStats({
           totalEstudiantes,
@@ -71,10 +101,8 @@ export default function DashboardView() {
           projectsBySubject,
           projectsByPeriod,
         })
-        setError(null)
-      } catch (err) {
-        console.error("Error fetching dashboard data:", err)
-        setError("Error al cargar los datos del dashboard")
+      } catch (error) {
+        console.error("Error cargando datos del dashboard:", error)
       } finally {
         setLoading(false)
       }
@@ -83,183 +111,177 @@ export default function DashboardView() {
     fetchData()
   }, [])
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <div className="text-center">
-          <div className="inline-block w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-          <p className="text-muted-foreground">Cargando datos desde Google Sheets...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <Card className="border-destructive/30 bg-destructive/5">
-          <CardContent className="pt-6">
-            <p className="text-destructive">{error}</p>
+  const renderSkeletonCards = () => (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {[1, 2, 3, 4].map((i) => (
+        <Card key={i}>
+          <CardContent className="p-4 space-y-4">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-6 w-16" />
+            <Skeleton className="h-3 w-20" />
           </CardContent>
         </Card>
-      </div>
-    )
-  }
+      ))}
+    </div>
+  )
 
-  if (!stats) {
+  const renderSkeletonCharts = () => (
+    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mt-6">
+      {[1, 2, 3].map((i) => (
+        <Card key={i}>
+          <CardHeader>
+            <Skeleton className="h-4 w-32" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-40 w-full" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+
+  if (loading || !stats) {
     return (
-      <div className="flex items-center justify-center py-16">
-        <p className="text-muted-foreground">No hay datos disponibles</p>
+      <div className="space-y-6">
+        {renderSkeletonCards()}
+        {renderSkeletonCharts()}
       </div>
     )
-  }
-
-  const statusBadgeColors = {
-    Formulación: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    "En desarrollo": "bg-blue-100 text-blue-800 border-blue-200",
-    Aprobado: "bg-green-100 text-green-800 border-green-200",
-    Finalizado: "bg-purple-100 text-purple-800 border-purple-200",
-    Archivado: "bg-gray-100 text-gray-800 border-gray-200",
-    "Sin estado": "bg-muted text-muted-foreground border-border",
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-2">Resumen general de proyectos, docentes y estudiantes</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Estudiantes</CardTitle>
-            <div className="bg-blue-100 p-2.5 rounded-lg">
-              <Users className="h-5 w-5 text-blue-600" />
-            </div>
+    <div className="space-y-6">
+      {/* Tarjetas de resumen */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium text-muted-foreground">Estudiantes</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.totalEstudiantes}</div>
-            <p className="text-xs text-muted-foreground mt-1">Registrados en el programa</p>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold">{stats.totalEstudiantes}</div>
+            <p className="text-xs text-muted-foreground mt-1">Registrados en el sistema</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Docentes</CardTitle>
-            <div className="bg-green-100 p-2.5 rounded-lg">
-              <BookOpen className="h-5 w-5 text-green-600" />
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium text-muted-foreground">Docentes</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.totalDocentes}</div>
-            <p className="text-xs text-muted-foreground mt-1">Miembros del equipo</p>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold">{stats.totalDocentes}</div>
+            <p className="text-xs text-muted-foreground mt-1">Vinculados a proyectos</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Proyectos</CardTitle>
-            <div className="bg-purple-100 p-2.5 rounded-lg">
-              <FolderOpen className="h-5 w-5 text-purple-600" />
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium text-muted-foreground">Proyectos</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.totalProyectos}</div>
-            <p className="text-xs text-muted-foreground mt-1">Proyectos activos</p>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold">{stats.totalProyectos}</div>
+            <p className="text-xs text-muted-foreground mt-1">Proyectos de investigación registrados</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm hover:shadow-md transition-all duration-300 border-border/50 bg-gradient-to-br from-card to-card/50">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-muted-foreground">Promedio</CardTitle>
-            <div className="bg-orange-100 p-2.5 rounded-lg">
-              <TrendingUp className="h-5 w-5 text-orange-600" />
-            </div>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium text-muted-foreground">
+              Promedio proyectos / estudiante
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.promedio.toFixed(2)}</div>
-            <p className="text-xs text-muted-foreground mt-1">Proyectos por estudiante</p>
+          <CardContent className="pt-0">
+            <div className="text-3xl font-bold">{stats.promedio.toFixed(2)}</div>
+            <p className="text-xs text-muted-foreground mt-1">Relación global del periodo</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-300 border-border/50">
-          <CardHeader className="border-b border-border/50 pb-4">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-primary" />
-              <CardTitle>Proyectos por Estado</CardTitle>
-            </div>
+      {/* Gráficas */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Proyectos por estado */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base md:text-lg">Proyectos por estado</CardTitle>
           </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-3">
-              {Object.entries(stats.projectsByStatus).map(([status, count]) => (
-                <div
-                  key={status}
-                  className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                >
-                  <span className="text-sm font-medium text-foreground">{status}</span>
-                  <Badge
-                    variant="secondary"
-                    className={`font-semibold ${statusBadgeColors[status as keyof typeof statusBadgeColors]}`}
+          <CardContent className="h-72">
+            {stats.projectsByStatus.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No hay datos de estado de proyectos.</p>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={stats.projectsByStatus}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label
                   >
-                    {count}
-                  </Badge>
-                </div>
-              ))}
-            </div>
+                    {stats.projectsByStatus.map((entry, index) => (
+                      <Cell key={`cell-status-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm hover:shadow-md transition-shadow duration-300 border-border/50">
-          <CardHeader className="border-b border-border/50 pb-4">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-accent" />
-              <CardTitle>Proyectos por Período</CardTitle>
-            </div>
+        {/* Proyectos por asignatura */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base md:text-lg">Proyectos por asignatura</CardTitle>
           </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-3">
-              {Object.entries(stats.projectsByPeriod)
-                .sort(([periodA], [periodB]) => periodB.localeCompare(periodA))
-                .map(([period, count]) => (
-                  <div
-                    key={period}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                  >
-                    <span className="text-sm font-medium text-foreground">{period}</span>
-                    <Badge variant="secondary" className="font-semibold">
-                      {count}
-                    </Badge>
-                  </div>
-                ))}
-            </div>
+          <CardContent className="h-72">
+            {stats.projectsBySubject.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No hay proyectos agrupados por asignatura.</p>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={stats.projectsBySubject}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                    {stats.projectsBySubject.map((entry, index) => (
+                      <Cell key={`cell-subject-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Proyectos por período */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base md:text-lg">Proyectos por período</CardTitle>
+          </CardHeader>
+          <CardContent className="h-72">
+            {stats.projectsByPeriod.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No hay proyectos agrupados por período.</p>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={stats.projectsByPeriod}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                    {stats.projectsByPeriod.map((entry, index) => (
+                      <Cell key={`cell-period-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
       </div>
-
-      <Card className="shadow-sm hover:shadow-md transition-shadow duration-300 border-border/50">
-        <CardHeader className="border-b border-border/50 pb-4">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-secondary" />
-            <CardTitle>Proyectos por Asignatura</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {Object.entries(stats.projectsBySubject).map(([subject, count]) => (
-              <div
-                key={subject}
-                className="p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors border border-border/30"
-              >
-                <p className="text-sm font-medium text-foreground truncate">{subject}</p>
-                <p className="text-2xl font-bold text-primary mt-2">{count}</p>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
