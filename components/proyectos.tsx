@@ -6,18 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Pencil, Trash2, Plus, Download, ExternalLink } from "lucide-react"
-import ProyectoModal from "@/components/modals/proyecto-modal"
 
-interface Proyecto {
-  id?: string
-  periodo: string
-  asignatura: string
-  docente: string
-  estudiantes: string
-  titulo: string
-  link?: string
-  estado: string
-}
+// 👇 Importamos el tipo y el componente desde proyecto-modal
+import ProyectoModal, { Proyecto } from "@/components/modals/proyecto-modal"
 
 export default function Proyectos() {
   const [proyectos, setProyectos] = useState<Proyecto[]>([])
@@ -86,10 +77,11 @@ export default function Proyectos() {
       })
 
       if (res.ok) {
-        const newData = await res.json()
+        const newData: Proyecto = await res.json()
         const newProyectos = editingProyecto
           ? proyectos.map((p) => (p.id === editingProyecto.id ? newData : p))
           : [...proyectos, newData]
+
         setProyectos(newProyectos)
         applyFilters(searchTerm, filterStatus)
         setShowModal(false)
@@ -220,7 +212,9 @@ export default function Proyectos() {
                       <td className="py-3 px-2 max-w-xs truncate">{proyecto.titulo}</td>
                       <td className="py-3 px-2">
                         <span
-                          className={`inline-block px-2 py-1 rounded text-xs font-medium ${getStatusColor(proyecto.estado)}`}
+                          className={`inline-block px-2 py-1 rounded text-xs font-medium ${getStatusColor(
+                            proyecto.estado || "Sin estado",
+                          )}`}
                         >
                           {proyecto.estado || "Sin estado"}
                         </span>
@@ -267,11 +261,14 @@ export default function Proyectos() {
         </CardContent>
       </Card>
 
+      {/* ✅ Uso correcto del modal */}
       <ProyectoModal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-          setEditingProyecto(null)
+        open={showModal}
+        onOpenChange={(open) => {
+          setShowModal(open)
+          if (!open) {
+            setEditingProyecto(null)
+          }
         }}
         onSave={handleSave}
         initialData={editingProyecto}
