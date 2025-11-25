@@ -5,18 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Pencil, Trash2, Plus } from "lucide-react"
-import DocenteModal from "@/components/modals/docente-modal"
-
-interface Docente {
-  id?: string
-  asignatura: string
-  apellidos: string
-  nombres: string
-  nombreCompleto: string
-  correo: string
-  telefono: string
-  tipoVinculacion: string
-}
+import DocenteModal, { Docente } from "./modals/docente-modal"
 
 export default function Docentes() {
   const [docentes, setDocentes] = useState<Docente[]>([])
@@ -31,7 +20,7 @@ export default function Docentes() {
       try {
         setLoading(true)
         const res = await fetch("/api/docentes")
-        const data = await res.json()
+        const data = (await res.json()) as Docente[]
         setDocentes(data)
         setFilteredDocentes(data)
       } catch (error) {
@@ -64,22 +53,27 @@ export default function Docentes() {
         body: JSON.stringify(docente),
       })
 
-      if (res.ok) {
-        const newData = await res.json()
-        const newDocentes = editingDocente
-          ? docentes.map((d) => (d.id === editingDocente.id ? newData : d))
-          : [...docentes, newData]
-        setDocentes(newDocentes)
-        setFilteredDocentes(newDocentes)
-        setShowModal(false)
-        setEditingDocente(null)
+      if (!res.ok) {
+        console.error("Error en respuesta de API al guardar docente")
+        return
       }
+
+      const newData = (await res.json()) as Docente
+
+      const newDocentes = editingDocente
+        ? docentes.map((d) => (d.id === editingDocente.id ? newData : d))
+        : [...docentes, newData]
+
+      setDocentes(newDocentes)
+      setFilteredDocentes(newDocentes)
+      setShowModal(false)
+      setEditingDocente(null)
     } catch (error) {
       console.error("Error saving docente:", error)
     }
   }
 
-  const handleDelete = async (id: string | undefined) => {
+  const handleDelete = async (id?: string) => {
     if (!id || !confirm("¿Está seguro de que desea eliminar este docente?")) return
 
     try {
@@ -125,7 +119,7 @@ export default function Docentes() {
           {loading ? (
             <div className="space-y-3">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-12 bg-muted rounded"></div>
+                <div key={i} className="h-12 bg-muted rounded" />
               ))}
             </div>
           ) : (
@@ -182,10 +176,12 @@ export default function Docentes() {
       </Card>
 
       <DocenteModal
-        isOpen={showModal}
-        onClose={() => {
-          setShowModal(false)
-          setEditingDocente(null)
+        open={showModal}
+        onOpenChange={(open) => {
+          setShowModal(open)
+          if (!open) {
+            setEditingDocente(null)
+          }
         }}
         onSave={handleSave}
         initialData={editingDocente}
