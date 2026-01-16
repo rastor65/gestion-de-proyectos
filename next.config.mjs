@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 👇 Si en algún momento pusiste esto, quítalo
-  // output: "export",
+  // sin output: "export"
+  // sin assetPrefix raro para GitHub Pages
 }
 
 export default nextConfig
